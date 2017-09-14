@@ -16,6 +16,9 @@ dep_load()
         "../function/_shell_compat.sh"
         "../function/find_local_pkgset.sh"
         "../function/locale_text.sh"
+        "../function/display_notices.sh"
+        "../function/export_path.sh"
+        "../function/munge_path.sh"
     )
     for file in "${deps[@]}"
     do

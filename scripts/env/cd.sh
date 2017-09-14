@@ -158,13 +158,13 @@ cd() {
 
         [[ "${GVM_DEBUG}" -eq 1 ]] && echo "Switching to: ${use_goversion}"
 
-        \gvm use --quiet "${use_goversion}" || return 1
+        source \gvm use --quiet "${use_goversion}" || rslt=1
 
         unset use_goversion
     elif [[ -n "${defaults_go_name}" ]]
     then
         [[ "${GVM_DEBUG}" -eq 1 ]] && echo "No .go-version found. Using system or default go."
-        \gvm use --quiet "${defaults_go_name}" || return 1
+        source \gvm use --quiet "${defaults_go_name}" || rslt=1
     else
         # quietly failing
         if [[ "${GVM_DEBUG}" -eq 1 ]]
@@ -182,7 +182,7 @@ cd() {
             then
                 __gvm_locale_text_for_key "go_install_prompt" > /dev/null
                 __gvm_display_error "${RETVAL}"
-                return 1
+                rslt=1
             fi
 
             unset go_archive_path
@@ -190,7 +190,7 @@ cd() {
         fi
 
         # not a cd() error, just a gvm error...need to pretend nothing happened!
-        return 0
+        rslt=0
     fi
 
     __gvmp_find_closest_dot_go_pkgset > /dev/null; rslt=$?
@@ -206,18 +206,18 @@ cd() {
 
         [[ "${GVM_DEBUG}" -eq 1 ]] && echo "Switching to: ${use_gopkgset}"
 
-        \gvm pkgset use --quiet "${use_gopkgset}" || return 1
+        source \gvm pkgset use --quiet "${use_gopkgset}" || rslt=1
         unset use_gopkgset
     elif [[ -n "${defaults_go_pkgset}" ]]
     then
         [[ "${GVM_DEBUG}" -eq 1 ]] && echo "No .go-pkgset found. Using system or default pkgset."
-        \gvm pkgset use --quiet "${defaults_go_pkgset}" || return 1
+        source \gvm pkgset use --quiet "${defaults_go_pkgset}" || rslt=1
     else
         # quietly failing
         [[ "${GVM_DEBUG}" -eq 1 ]] && echo "No fallback pkgset could be found."
     fi
 
-    return 0
+    return $rslt
 }
 
 function __gvmp_find_closest_dot_go_version() {
